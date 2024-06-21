@@ -1,25 +1,24 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import SearchPanel from './components/SearchPanel';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [rating, setRating] = useState('Any rating');
+    const [genre, setGenre] = useState('Any genre');
+
+    return (
+        <div className="app">
+            <SearchPanel
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                rating={rating}
+                onRatingChange={setRating}
+                genre={genre}
+                onGenreChange={setGenre}
+            />
+        </div>
+    );
+};
 
 export default App;
