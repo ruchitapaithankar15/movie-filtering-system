@@ -1,0 +1,26 @@
+/* src/components/MovieList.css */
+.movie-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.movie-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.movie-title {
+    font-weight: bold;
+}
+
+.movie-rating {
+    color: black;
+}
+
+.movie-category {
+    color: gray;
+}
