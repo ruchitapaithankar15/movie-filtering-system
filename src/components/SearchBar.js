@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './SearchBar.css';
 import MovieList from './MovieList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,9 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
     const [isGenreOpen, setIsGenreOpen] = useState(false);
     const [isRatingOpen, setIsRatingOpen] = useState(false);
 
+    const genreRef = useRef(null);
+    const ratingRef = useRef(null);
+
     useEffect(() => {
         fetch('/movies.json')
             .then(response => response.json())
@@ -21,6 +24,21 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
                 setGenres(uniqueGenres);
             })
             .catch(error => console.error('Error fetching the movies:', error));
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (genreRef.current && !genreRef.current.contains(event.target)) {
+                setIsGenreOpen(false);
+            }
+            if (ratingRef.current && !ratingRef.current.contains(event.target)) {
+                setIsRatingOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, []);
 
     const toggleRating = (rating) => {
@@ -48,41 +66,7 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
             />
-            <div className="dropdown genre-dropdown">
-                <button className="dropbtn" onClick={() => setIsGenreOpen(!isGenreOpen)}>
-                    <span>Genre </span>
-                    <FontAwesomeIcon icon={isGenreOpen ? faCaretUp : faCaretDown} />
-                </button>
-                {isGenreOpen && (
-                    <div className="dropdown-content">
-                        <div className="dropdown-item" onClick={() => setSelectedGenre('')}>
-                            <input
-                                type="checkbox"
-                                checked={selectedGenre === ''}
-                                onChange={() => setSelectedGenre('')}
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                            <span className="item-label"> All Genres </span>
-                        </div>
-                        {genres.map(genre => (
-                            <div
-                                key={genre}
-                                className="dropdown-item"
-                                onClick={() => setSelectedGenre(genre)}
-                            >
-                                <input
-                                    type="checkbox"
-                                    checked={selectedGenre === genre}
-                                    onChange={() => setSelectedGenre(genre)}
-                                    onClick={(e) => e.stopPropagation()}
-                                />
-                                <span className="item-label">{genre}</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-            <div className="dropdown rating-dropdown">
+            <div className="dropdown rating-dropdown" ref={ratingRef}>
                 <button className="dropbtn" onClick={() => setIsRatingOpen(!isRatingOpen)}>
                     <span>Rating </span>
                     <FontAwesomeIcon icon={isRatingOpen ? faCaretUp : faCaretDown} />
@@ -119,6 +103,40 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
                                         />
                                     ))}
                                 </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+            <div className="dropdown genre-dropdown" ref={genreRef}>
+                <button className="dropbtn" onClick={() => setIsGenreOpen(!isGenreOpen)}>
+                    <span>Genre </span>
+                    <FontAwesomeIcon icon={isGenreOpen ? faCaretUp : faCaretDown} />
+                </button>
+                {isGenreOpen && (
+                    <div className="dropdown-content">
+                        <div className="dropdown-item" onClick={() => setSelectedGenre('')}>
+                            <input
+                                type="checkbox"
+                                checked={selectedGenre === ''}
+                                onChange={() => setSelectedGenre('')}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                            <span className="item-label"> Any Genres </span>
+                        </div>
+                        {genres.map(genre => (
+                            <div
+                                key={genre}
+                                className="dropdown-item"
+                                onClick={() => setSelectedGenre(genre)}
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={selectedGenre === genre}
+                                    onChange={() => setSelectedGenre(genre)}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                                <span className="item-label">{genre}</span>
                             </div>
                         ))}
                     </div>
