@@ -10,24 +10,6 @@ const SearchPanel = ({ searchTerm, onSearchChange, rating, onRatingChange, genre
     return (
         <div className="search-panel">
             <SearchBar searchTerm={searchTerm} onSearchChange={onSearchChange} />
-            <Dropdown 
-                title="Rating" 
-                options={[...Array(10).keys()].map(i => ({ value: i + 1, label: i + 1 }))}
-                selectedOption={rating} 
-                onOptionChange={onRatingChange} 
-                icon={<FontAwesomeIcon icon={faCaretDown} />} 
-                type="rating" 
-                withCheckboxes={true} 
-            />
-            <Dropdown 
-                title="Genre" 
-                options={["Any genre", "Action", "Comedy", "Thriller", "Drama"].map(genre => ({ value: genre, label: genre }))}
-                selectedOption={genre} 
-                onOptionChange={onGenreChange} 
-                icon={<FontAwesomeIcon icon={faCaretDown} />} 
-                type="genre" 
-                withCheckboxes={true} 
-            />
         </div>
     );
 };

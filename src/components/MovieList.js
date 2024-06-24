@@ -9,8 +9,10 @@ const MovieList = ({ movies }) => {
         <ul className="movie-list">
             {movies.map((movie, index) => (
                 <li key={index} className="movie-item">
+                    <div className='="movie_name_rating'>
                     <span className="movie-title">{movie.title}</span>
                     <span className="movie-rating">{renderStars(movie.rating)}</span>
+                    </div>
                     <span className="movie-category">{movie.category}</span>
                 </li>
             ))}
